@@ -177,7 +177,7 @@ export default function App() {
 
   function restoreAppState(erState){
     Utils.log("Restore application state based on escape room state:", erState);
-    if (escapp.getAllPuzzlesSolved()){
+    if (escapp.getAllPuzzlesSolved() && (escapp.getSolvedPuzzles().length > 0)){
       //Puzzle already solved
       if((appSettings.actionAfterSolve === "SHOW_MESSAGE")&&(screen !== MESSAGE_SCREEN)){
         setScreen(MESSAGE_SCREEN);

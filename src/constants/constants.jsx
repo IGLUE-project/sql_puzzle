@@ -1,5 +1,6 @@
 export const DEFAULT_APP_SETTINGS = {
   skin: "STANDARD",
+  solutionLength: 1,
   actionAfterSolve: "NONE",
   message: undefined,
   keysType: "NUMBERS",
