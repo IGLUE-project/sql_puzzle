@@ -4,7 +4,7 @@ export const DEFAULT_APP_SETTINGS = {
   actionAfterSolve: "NONE",
   message: undefined,
   keysType: "NUMBERS",
-  background: "images/background.png",
+  backgroundImg: "images/background.png",
   backgroundKeypad: "images/background_keypad.png",
   backgroundKey: "images/background_key.png",
   numbers: ["1","2","3","4","5","6","7","8","9","✱","0","#"],
@@ -75,7 +75,7 @@ export const DEFAULT_APP_SETTINGS = {
 };
 
 export const SKIN_SETTINGS_RETRO = {
-  background: "images/background_retro.png",
+  backgroundImg: "images/background_retro.png",
   backgroundKeypad: "images/background_keypad_retro.png",
   backgroundKey: "images/background_key_retro.png",
   coloredBackgroundKeys: [
@@ -102,7 +102,7 @@ export const SKIN_SETTINGS_RETRO = {
 };
 
 export const SKIN_SETTINGS_RETRO_JUNGLE = {
-  background: "images/background_retroB.png",
+  backgroundImg: "images/background_retroB.png",
   backgroundKeypad: "images/background_keypad_retroB.png",
   backgroundKey: "images/background_key_retro.png",
   coloredBackgroundKeys: [
@@ -129,7 +129,7 @@ export const SKIN_SETTINGS_RETRO_JUNGLE = {
 };
 
 export const SKIN_SETTINGS_RETRO_REALISTIC = {
-  background: "images/background_retroC.png",
+  backgroundImg: "images/background_retroC.png",
   backgroundKeypad: "images/background_keypad_retroC.png",
   backgroundKey: "images/background_key_retroC.png",
   coloredBackgroundKeys: [
@@ -156,7 +156,7 @@ export const SKIN_SETTINGS_RETRO_REALISTIC = {
 };
 
 export const SKIN_SETTINGS_FUTURISTIC = {
-  background: "images/background_futuristic.png",
+  backgroundImg: "images/background_futuristic.png",
   backgroundKeypad: "images/background_keypad_futuristic.png",
   backgroundKey: "images/background_key_futuristic.png",
   coloredBackgroundKeys: [

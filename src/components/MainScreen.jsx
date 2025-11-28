@@ -152,10 +152,6 @@ const MainScreen = (props) => {
   }
 
   let backgroundImage = 'url("' + appSettings.backgroundKeypad + '")';
-  if(appSettings.background && appSettings.background !== "NONE"){
-    backgroundImage += ', url("' + appSettings.background + '")';
-  }
-
   let boxLightTransitionClass = (light === "ok" && appSettings.skin.includes("RETRO")) ? "slowTransition" : "";
 
   return (
