@@ -106,7 +106,8 @@ export default function App() {
     }
 
     if (typeof _appSettings.backgroundImg === "string" && _appSettings.backgroundImg.trim() !== "" && _appSettings.backgroundImg !== "NONE") {
-      _appSettings.background = "url(" + _appSettings.backgroundImg + ") no-repeat";
+      _appSettings.backgroundImageProp = `url("${_appSettings.backgroundImg}")`;
+      _appSettings.backgroundRepeat = "no-repeat";
       _appSettings.backgroundSize = "100% 100%";
     }
 
@@ -274,9 +275,10 @@ export default function App() {
   ];
 
   let globalWrapperStyle = {};
-  if(appSettings !== null && typeof appSettings.background === "string" && typeof appSettings.backgroundSize === "string"){
+  if(appSettings !== null && typeof appSettings.backgroundImageProp === "string"){
     globalWrapperStyle = {
-      background: appSettings.background,
+      backgroundImage: appSettings.backgroundImageProp,
+      backgroundRepeat: appSettings.backgroundRepeat,
       backgroundSize: appSettings.backgroundSize,
     }
   }
