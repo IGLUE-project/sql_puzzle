@@ -181,7 +181,7 @@ export default function App() {
 
     switch(appSettings.actionAfterSolve){
       case "SHOW_MESSAGE":
-        return setScreen(MESSAGE_SCREEN);
+        return setTimeout(()=>{setScreen(MESSAGE_SCREEN)}, 5000); // setScreen(MESSAGE_SCREEN);
       case "NONE":
       default:
         return submitPuzzleSolution();

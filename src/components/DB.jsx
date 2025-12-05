@@ -67,7 +67,7 @@ function DB(props) {
         const newStatus = tests ? tests.map((t) => {
         try {
             // eslint-disable-next-line no-new-func
-            const testFn = new Function(`return (${t.fn});`)();
+            const testFn = new Function(`return (({query,columns,rows})=>{${t.fn});}`)();
             const passed = !!testFn(context);
             return { id: t.id || t.description, description: t.description || t.id, passed, error: null};
         } catch (err) {
