@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SQL → SQLite (.db)</title>
+
+  <!-- Bootswatch BRITE theme -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootswatch@5/dist/lux/bootstrap.min.css">
+
+  <style>
+    body {
+      padding-top: 30px;
+    }
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    textarea {
+      font-family: monospace;
+      height: 250px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card shadow">
+      <div class="card-body">
+
+        <h1 class="card-title mb-4">SQL → SQLite (.db)</h1>
+        <!-- FILE UPLOAD -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Upload SQL File (optional)</label>
+          <input type="file" id="sqlFileInput" class="form-control" accept=".sql">
+          <div class="form-text">
+            Uploaded SQL will be loaded into the editor below.
+          </div>
+        </div>
+
+
+        <!-- SQL INPUT AREA -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">SQL Editor</label>
+          <textarea id="sqlEditor" class="form-control"
+            placeholder="Write SQL here or upload a .sql file…"></textarea>
+        </div>
+
+        
+
+        <!-- OUTPUT DB NAME -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Output DB File Name</label>
+          <input type="text" id="dbFileName" class="form-control" value="output.db">
+        </div>
+
+        <!-- BUTTON -->
+        <button id="runButton" class="btn btn-primary" disabled>
+          Run SQL and Download .db
+        </button>
+
+        <div id="status" class="form-text"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- sql.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
+
+  <script>
+    let SQL;
+
+    // Initialize sql.js
+    initSqlJs({
+      locateFile: file =>
+        "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/" + file
+    }).then(sql => {
+      SQL = sql;
+      document.getElementById("runButton").disabled = false;
+      document.getElementById("status").textContent =
+        "sql.js loaded. You may write or upload SQL.";
+    });
+
+    // When a SQL file is uploaded → load into textarea
+    document.getElementById("sqlFileInput")
+      .addEventListener("change", async event => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const text = await file.text();
+        document.getElementById("sqlEditor").value = text;
+        document.getElementById("status").textContent =
+          "SQL loaded from file into the editor.";
+      });
+
+    async function runSqlAndDownload() {
+      const sqlText = document.getElementById("sqlEditor").value.trim();
+      const status = document.getElementById("status");
+      const dbFileName = document.getElementById("dbFileName").value || "output.db";
+
+      if (!sqlText) {
+        status.textContent = "SQL is empty — write something or upload a file.";
+        return;
+      }
+
+      const db = new SQL.Database();
+      status.textContent = "Running SQL…";
+
+      try {
+        db.exec("PRAGMA foreign_keys = OFF;");
+        db.exec("BEGIN TRANSACTION;");
+        db.exec(sqlText);
+        db.exec("COMMIT;");
+
+        const binaryArray = db.export();
+        const blob = new Blob([binaryArray], { type: "application/octet-stream" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = dbFileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        status.textContent = "SQL executed successfully. Database downloaded.";
+      } catch (e) {
+        status.textContent = "Error executing SQL: " + e.message;
+      } finally {
+        db.close();
+      }
+    }
+
+    document.getElementById("runButton")
+      .addEventListener("click", runSqlAndDownload);
+  </script>
+</body>
+</html>
