@@ -8,19 +8,7 @@ div#screen_main {
 	justify-content: center;
 }
 
-div#keypad {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-}
-
-div#keypad div.row {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-}
-
+ 
 div.boxButton {
 	background-position: center;
 	background-repeat: no-repeat;
@@ -51,50 +39,12 @@ div.boxButton div {
 	text-align: center;
 	font-size: 4vmin;
 	font-family: "Consolas", "Roboto", sans-serif;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none; 
-  -moz-user-select: none;
-  -ms-user-select: none; 
-  user-select: none;
-  cursor: pointer; 
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none; 
+	-moz-user-select: none;
+	-ms-user-select: none; 
+	user-select: none;
+	cursor: pointer; 
 }
-
-div.boxButton div img.symbol {
-  align-self: center;
-  max-height: 55%;
-  max-width: 55%;
-}
-
-div.retro div.boxButton div img.symbol, div.retro_jungle div.boxButton div img.symbol {
-  margin-top: -1vh;
-}
-
-div.retro div.boxButton div, div.retro_jungle div.boxButton div, div.retro_realistic div.boxButton div {
-  font-size: 3.5vmin;
-  font-family: 'Retro';
-  font-weight: bold;
-}
-
-div.retro_realistic div.boxButton div {
-  padding-top: 1px;
-}
-
-div.retro div.boxButton div p, div.retro_jungle div.boxButton div p {
-  padding-bottom: 1px;
-}
-
-div.boxLight {
-	position: absolute;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: contain;
-	border: none;
-	outline: none;
-	text-decoration: none;
-	border-image: none;
-}
-
-div.boxLight.slowTransition {
-	transition: opacity 6.1s ease, visibility ease 6.1s;
-}
+ 

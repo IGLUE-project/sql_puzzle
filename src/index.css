@@ -1,13 +1,22 @@
 html, body, div#root, div#global_wrapper, div.screen_wrapper, div.screen_content {
   min-height: 100%;
-  height: 100%;
+  /*height: 100%;*/
   width: 100%;
   margin: 0;
   padding: 0;
   border: none;
+  background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+ 
+
+#badged {
+  position: absolute;
+  right: 7px;
 }
 
-html, body {
-  background: transparent;
+.btn svg {
+      vertical-align: middle;
 }
-
+ 

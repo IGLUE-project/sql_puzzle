@@ -3,7 +3,7 @@ import {useState, useEffect, useRef, useContext } from 'react';
 import { GlobalContext } from "./GlobalContext";
 import './../assets/scss/app.scss';
 
-import { DEFAULT_APP_SETTINGS, SKIN_SETTINGS_RETRO, SKIN_SETTINGS_RETRO_JUNGLE, SKIN_SETTINGS_RETRO_REALISTIC, SKIN_SETTINGS_FUTURISTIC, ESCAPP_CLIENT_SETTINGS, MAIN_SCREEN, MESSAGE_SCREEN } from '../constants/constants.jsx';
+import { DEFAULT_APP_SETTINGS, ESCAPP_CLIENT_SETTINGS, MAIN_SCREEN, MESSAGE_SCREEN } from '../constants/constants.jsx';
 import MainScreen from './MainScreen.jsx';
 import MessageScreen from './MessageScreen.jsx';
 
@@ -14,8 +14,7 @@ export default function App() {
   const [screen, setScreen] = useState(MAIN_SCREEN);
   const prevScreen = useRef(screen);
   const solution = useRef(null);
-  const [appWidth, setAppWidth] = useState(0);
-  const [appHeight, setAppHeight] = useState(0);
+ 
   
   useEffect(() => {
     //Init Escapp client
@@ -34,11 +33,6 @@ export default function App() {
     let _appSettings = processAppSettings(_escapp.getAppSettings());
     setAppSettings(_appSettings);
     Utils.log("App settings:", _appSettings);
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    }
   }, []);
 
   function processAppSettings(_appSettings){
@@ -49,53 +43,22 @@ export default function App() {
       _appSettings.skin = DEFAULT_APP_SETTINGS.skin;
     }
 
-    let skinSettings;
-    switch(_appSettings.skin){
-      case "RETRO":
-        skinSettings = SKIN_SETTINGS_RETRO;
-        break;
-      case "RETRO_JUNGLE":
-        skinSettings = SKIN_SETTINGS_RETRO_JUNGLE;
-        break;
-      case "RETRO_REALISTIC":
-        skinSettings = SKIN_SETTINGS_RETRO_REALISTIC;
-        break;
-      case "FUTURISTIC":
-        skinSettings = SKIN_SETTINGS_FUTURISTIC;
-        break;
-      default:
-        skinSettings = {};
-    }
-    let DEFAULT_APP_SETTINGS_SKIN = Utils.deepMerge(DEFAULT_APP_SETTINGS, skinSettings);
- 
-     // Merge _appSettings with DEFAULT_APP_SETTINGS_SKIN to obtain final app settings
-    _appSettings = Utils.deepMerge(DEFAULT_APP_SETTINGS_SKIN, _appSettings);
     
-    const allowedActions = ["NONE", "SHOW_MESSAGE"];
-    if(!allowedActions.includes(_appSettings.actionAfterSolve)) {
-      _appSettings.actionAfterSolve = DEFAULT_APP_SETTINGS.actionAfterSolve;
+    const oldLink = document.getElementById("bootswatch-theme");
+    if (oldLink) {
+      oldLink.remove();
     }
 
-    switch(_appSettings.keysType){
-      case "LETTERS":
-        _appSettings.keys = _appSettings.letters;
-        _appSettings.backgroundKeys = new Array(12).fill(_appSettings.backgroundKey);
-        break;
-      case "COLORS":
-        _appSettings.keys = _appSettings.colors;
-        _appSettings.backgroundKeys = _appSettings.coloredBackgroundKeys;
-        break;
-      case "SYMBOLS":
-        _appSettings.keys = _appSettings.symbols;
-        if((_appSettings.skin === "FUTURISTIC")&&(_appSettings.backgroundKey === "images/background_key_futuristic.png")){
-          _appSettings.backgroundKey = "images/background_key_futuristic_black.png";
-        }
-        _appSettings.backgroundKeys = new Array(12).fill(_appSettings.backgroundKey);
-        break;
-      default:
-        //NUMBERS
-        _appSettings.keys = _appSettings.numbers;
-        _appSettings.backgroundKeys = new Array(12).fill(_appSettings.backgroundKey);
+    const link = document.createElement("link");
+    link.id = "bootswatch-theme";
+    link.rel = "stylesheet";
+    link.href = `https://cdn.jsdelivr.net/npm/bootswatch@5/dist/${_appSettings.theme}/bootstrap.min.css`;
+    document.head.appendChild(link);
+    
+    const allowedActions = ["NONE", "SHOW_MESSAGE"];
+
+    if(!allowedActions.includes(_appSettings.actionAfterSolve)) {
+      _appSettings.actionAfterSolve = DEFAULT_APP_SETTINGS.actionAfterSolve;
     }
 
     //Init internacionalization module
@@ -108,7 +71,7 @@ export default function App() {
     if (typeof _appSettings.backgroundImg === "string" && _appSettings.backgroundImg.trim() !== "" && _appSettings.backgroundImg !== "NONE") {
       _appSettings.backgroundImageProp = `url("${_appSettings.backgroundImg}")`;
       _appSettings.backgroundRepeat = "no-repeat";
-      _appSettings.backgroundSize = "100% 100%";
+      _appSettings.backgroundSize = "contain";
     }
 
     //Change HTTP protocol to HTTPs in URLs if necessary
@@ -161,12 +124,7 @@ export default function App() {
       });
     }
   }, [escapp, appSettings, Storage]);
-
-  useEffect(() => {
-    if(loading === false){
-      handleResize();
-    }
-  }, [loading]);
+ 
 
   useEffect(() => {
     if (screen !== prevScreen.current) {
@@ -176,10 +134,6 @@ export default function App() {
     }
   }, [screen]);
 
-  function handleResize(){
-    setAppWidth(window.innerWidth);
-    setAppHeight(window.innerHeight);
-  }
 
   function restoreAppState(erState){
     Utils.log("Restore application state based on escape room state:", erState);
@@ -218,8 +172,8 @@ export default function App() {
     }
   }
 
-  function onKeypadSolved(_solution){
-    Utils.log("onKeypadSolved with solution:", _solution);
+  function onQueryRun(_solution){
+    Utils.log("onQueryRun with solution:", _solution);
     if(typeof _solution !== "string"){
       return;
     }
@@ -266,28 +220,26 @@ export default function App() {
   let screens = [
     {
       id: MAIN_SCREEN,
-      content: <MainScreen appHeight={appHeight} appWidth={appWidth} onKeypadSolved={onKeypadSolved} />
+      content: <MainScreen onQueryRun={onQueryRun} />
     },
     {
       id: MESSAGE_SCREEN,
-      content: <MessageScreen appHeight={appHeight} appWidth={appWidth} submitPuzzleSolution={submitPuzzleSolution} />
+      content: <MessageScreen submitPuzzleSolution={submitPuzzleSolution} />
     }
   ];
 
   let globalWrapperStyle = {};
-  if(appSettings !== null && typeof appSettings.backgroundImageProp === "string"){
+  console.log(appSettings !== null && (typeof appSettings.backgroundImg) === "string")
+  if(appSettings !== null && ((typeof appSettings.backgroundImg) === "string")){
     globalWrapperStyle = {
-      backgroundImage: appSettings.backgroundImageProp,
+      backgroundImage: "url("+appSettings.backgroundImg+")",
       backgroundRepeat: appSettings.backgroundRepeat,
       backgroundSize: appSettings.backgroundSize,
     }
   }
-
+  console.log(globalWrapperStyle)
   return (
-    <div id="global_wrapper" 
-      className={`${(appSettings !== null && typeof appSettings.skin === "string") ? appSettings.skin.toLowerCase() : ''}`}
-      style={globalWrapperStyle}
-    >
+    <div id="global_wrapper"  style={globalWrapperStyle} >
       {renderScreens(screens)}
     </div>
   )
