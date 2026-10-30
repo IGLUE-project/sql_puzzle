@@ -5,8 +5,6 @@ import DB  from "./DB.jsx";
 
 const MainScreen = (props) => {
   const { escapp, appSettings, Utils } = useContext(GlobalContext);
- 
-  let backgroundImage = 'url("' + appSettings.backgroundKeypad + '")';
 
   const checkSolution = (solution) => {
     if (appSettings.noLinkedPuzzles) return;
