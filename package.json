@@ -1,6 +1,6 @@
 {
   "name": "SQLPuzzle",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A web app for creating SQL puzzles in the Escapp platform",
   "author": "sonsoleslp",
   "license": "GNU General Public License v3.0",

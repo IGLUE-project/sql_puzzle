@@ -30,7 +30,6 @@ export let ESCAPP_APP_SETTINGS = {
       "description": "The query contains the word 'playlists'",
       "fn": "({ query }) => /\\bPlaylist\\b/i.test(query)"
     }
-
   ],
   locale:"es",
   escappClientSettings: {
