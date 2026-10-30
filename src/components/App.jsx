@@ -29,12 +29,12 @@ export default function App() {
     setStorage(_escapp.getStorage());
 
     //Get app settings provided by the Escapp server.
-    let _appSettings = processAppSettings(_escapp.getAppSettings());
+    let _appSettings = processAppSettings(_escapp.getAppSettings(),_escapp.getSettings());
     setAppSettings(_appSettings);
     Utils.log("App settings:", _appSettings);
   }, []);
 
-  function processAppSettings(_appSettings){
+  function processAppSettings(_appSettings,_escappSettings){
     if(typeof _appSettings !== "object"){
       _appSettings = {};
     }
@@ -46,15 +46,15 @@ export default function App() {
     if (oldLink) {
       oldLink.remove();
     }
-
     const link = document.createElement("link");
     link.id = "bootswatch-theme";
     link.rel = "stylesheet";
     link.href = `${import.meta.env.BASE_URL}themes/${_appSettings.theme}/bootstrap.min.css`;
     document.head.appendChild(link);
-    
-    const allowedActions = ["NONE", "SHOW_MESSAGE"];
 
+    _appSettings.noLinkedPuzzles = (!_escappSettings.linkedPuzzleIds || _escappSettings.linkedPuzzleIds.length === 0);
+
+    const allowedActions = ["NONE", "SHOW_MESSAGE"];
     if(!allowedActions.includes(_appSettings.actionAfterSolve)) {
       _appSettings.actionAfterSolve = DEFAULT_APP_SETTINGS.actionAfterSolve;
     }
@@ -187,8 +187,8 @@ export default function App() {
   }
 
   function submitPuzzleSolution(){
+    if (appSettings.noLinkedPuzzles || !solution.current) return;
     Utils.log("Submit puzzle solution", solution.current);
-
     escapp.submitNextPuzzle(solution.current, {}, (success, erState) => {
       if(!success){
         setScreen(MAIN_SCREEN);

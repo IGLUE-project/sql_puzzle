@@ -9,6 +9,7 @@ const MainScreen = (props) => {
   let backgroundImage = 'url("' + appSettings.backgroundKeypad + '")';
 
   const checkSolution = (solution) => {
+    if (appSettings.noLinkedPuzzles) return;
     Utils.log("Check solution", solution);
     escapp.checkNextPuzzle(solution, {}, (success, erState) => {
       Utils.log("Check solution Escapp response", success, erState);
