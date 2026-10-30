@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { useEffect, useMemo, useState, useContext } from "react";
 import initSqlJs from "sql.js";
+import wasmUrl from "sql.js/dist/sql-wasm.wasm?url";
 import { GlobalContext } from "./GlobalContext";
 import { FaPlay, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Container, Row, Col, Card, Form, Button, Table, Alert, Badge, Spinner, Carousel } from "react-bootstrap";
@@ -29,7 +30,7 @@ function DB(props) {
         try {
             setLoadingDb(true);
             const SQL = await initSqlJs({
-            locateFile: (file) => `https://sql.js.org/dist/${file}`,
+                locateFile: () => wasmUrl,
             });
 
             const dbRes = await fetch(appSettings.dbUrl);
