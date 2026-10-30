@@ -78,9 +78,8 @@ function DB(props) {
         }) : [];
 
         setTestsStatus(newStatus);
-        const res = newStatus.map(t => t.passed ? 1:0);
-        props.checkSolution(res.join(';') + (res.every(t => t == 1) ? '': ("|||"+query)));
-        
+        const res = newStatus.map(t => t.passed ? 1 : 0);
+        props.checkSolution(res.join(';'));
     };
 
     const runQuery = () => {
@@ -90,31 +89,26 @@ function DB(props) {
 
         try {
         const trimmed = query.trim();
-        if (!trimmed) {
-            setResult(null);
-            return;
-        }
-
-        const res = db.exec(trimmed);
-
-        if (!res || res.length === 0) {
-            const empty = { columns: [], rows: [] };
-            setResult(empty);
-            runTests(trimmed, empty.columns, empty.rows);
-            return;
-        }
-
-        const { columns, values } = res[0];
-        const rows = values || [];
-        const output = { columns, rows };
-        setResult(output);
-        runTests(trimmed, columns, rows);
+            if (!trimmed) {
+                setResult(null);
+                return;
+            }
+            const res = db.exec(trimmed);
+            if (!res || res.length === 0) {
+                const empty = { columns: [], rows: [] };
+                setResult(empty);
+                runTests(trimmed, empty.columns, empty.rows);
+                return;
+            }
+            const { columns, values } = res[0];
+            const rows = values || [];
+            const output = { columns, rows };
+            setResult(output);
+            runTests(trimmed, columns, rows);
         } catch (err) {
             console.error(err);
             setError(err.message || I18n.getTrans("i.error_running_query"));
             setResult(null);
-            props.checkSolution(err.message + "|||" + query);
-        
         }
     };
 
@@ -171,7 +165,7 @@ function DB(props) {
             </div>
             {images.length > 0 && (
                 <Button variant="outline-secondary" size="sm" onClick={() => setShowImagesPanel((v) => !v)}>
-                {!showImagesPanel ? <span>Show&nbsp;<FaEye size={24}/></span> : <span>Hide&nbsp;<FaEyeSlash size={24}/></span>}
+                {!showImagesPanel ? <span>{I18n.getTrans("i.show")}&nbsp;<FaEye size={24}/></span> : <span>{I18n.getTrans("i.hide")}&nbsp;<FaEyeSlash size={24}/></span>}
                 </Button>
             )}
             </Col>

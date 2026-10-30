@@ -15,7 +15,9 @@ export let LOCALES = {
     "i.Information":"Information",
     "i.RunQueryForResults": "Run a query to see results here.",
     "i.write_sql_here": "Write your SQL query here…",
-    "i.run": "Run"
+    "i.run": "Run",
+    "i.show": "Show",
+    "i.hide": "Hide"
   },
   es:{
     "i.message": "¡Has resuelto la consulta! \n Pulsa 'Continuar' para avanzar al siguiente reto.",
@@ -33,7 +35,9 @@ export let LOCALES = {
     "i.Information":"Información",
     "i.RunQueryForResults": "Ejecuta una consulta para ver los resultados aquí.",
     "i.write_sql_here": "Escribe tu consulta SQL aquí…",
-    "i.run": "Ejecutar"
+    "i.run": "Ejecutar",
+    "i.show": "Mostrar",
+    "i.hide": "Ocultar"
   },
   sr:{
     "i.message": "Rešili ste upit! \n Kliknite na 'Nastavi' da biste prešli na sledeću zagonetku.",
@@ -51,6 +55,8 @@ export let LOCALES = {
     "i.Information":"Informacije",
     "i.RunQueryForResults": "Izvršite upit da biste videli rezultate ovde.",
     "i.write_sql_here": "Napišite svoj SQL upit ovde…",
-    "i.Run":"Izvrši"
+    "i.Run":"Izvrši",
+    "i.show": "Prikaži",
+    "i.hide": "Sakrij"
   },
 };

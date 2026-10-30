@@ -2,7 +2,6 @@ import React from 'react';
 import {useState, useEffect, useRef, useContext } from 'react';
 import { GlobalContext } from "./GlobalContext";
 import './../assets/scss/app.scss';
-
 import { DEFAULT_APP_SETTINGS, ESCAPP_CLIENT_SETTINGS, MAIN_SCREEN, MESSAGE_SCREEN } from '../constants/constants.jsx';
 import MainScreen from './MainScreen.jsx';
 import MessageScreen from './MessageScreen.jsx';
@@ -43,7 +42,6 @@ export default function App() {
       _appSettings.skin = DEFAULT_APP_SETTINGS.skin;
     }
 
-    
     const oldLink = document.getElementById("bootswatch-theme");
     if (oldLink) {
       oldLink.remove();
@@ -52,7 +50,7 @@ export default function App() {
     const link = document.createElement("link");
     link.id = "bootswatch-theme";
     link.rel = "stylesheet";
-    link.href = `https://cdn.jsdelivr.net/npm/bootswatch@5/dist/${_appSettings.theme}/bootstrap.min.css`;
+    link.href = `${import.meta.env.BASE_URL}themes/${_appSettings.theme}/bootstrap.min.css`;
     document.head.appendChild(link);
     
     const allowedActions = ["NONE", "SHOW_MESSAGE"];
@@ -71,7 +69,7 @@ export default function App() {
     if (typeof _appSettings.backgroundImg === "string" && _appSettings.backgroundImg.trim() !== "" && _appSettings.backgroundImg !== "NONE") {
       _appSettings.backgroundImageProp = `url("${_appSettings.backgroundImg}")`;
       _appSettings.backgroundRepeat = "no-repeat";
-      _appSettings.backgroundSize = "contain";
+      _appSettings.backgroundSize = "100% 100%";
     }
 
     //Change HTTP protocol to HTTPs in URLs if necessary
@@ -128,7 +126,7 @@ export default function App() {
 
   useEffect(() => {
     if (screen !== prevScreen.current) {
-      Utils.log("Screen ha cambiado de", prevScreen.current, "a", screen);
+      Utils.log("Screen has changed from", prevScreen.current, "to", screen);
       prevScreen.current = screen;
       saveAppState();
     }
@@ -211,8 +209,17 @@ export default function App() {
     }
   };
 
+  let globalWrapperStyle = {};
+  if((appSettings !== null) && (typeof appSettings.backgroundImg === "string")){
+    globalWrapperStyle = {
+      backgroundImage: "url("+appSettings.backgroundImg+")",
+      backgroundRepeat: appSettings.backgroundRepeat,
+      backgroundSize: appSettings.backgroundSize,
+    }
+  }
+
   const renderScreen = (screenId, screenContent) => (
-    <div key={screenId} className={`screen_wrapper ${screen === screenId ? 'active' : ''}`} >
+    <div key={screenId} style={globalWrapperStyle} className={`screen_wrapper ${screen === screenId ? 'active' : ''}`} >
       {screenContent}
     </div>
   );
@@ -228,18 +235,8 @@ export default function App() {
     }
   ];
 
-  let globalWrapperStyle = {};
-  console.log(appSettings !== null && (typeof appSettings.backgroundImg) === "string")
-  if(appSettings !== null && ((typeof appSettings.backgroundImg) === "string")){
-    globalWrapperStyle = {
-      backgroundImage: "url("+appSettings.backgroundImg+")",
-      backgroundRepeat: appSettings.backgroundRepeat,
-      backgroundSize: appSettings.backgroundSize,
-    }
-  }
-  console.log(globalWrapperStyle)
   return (
-    <div id="global_wrapper"  style={globalWrapperStyle} >
+    <div id="global_wrapper">
       {renderScreens(screens)}
     </div>
   )

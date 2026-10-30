@@ -2,6 +2,7 @@
 
 export let ESCAPP_APP_SETTINGS = {
   //Settings that can be specified by the authors
+  //backgroundImg: "NONE", //backgroundImg can be "NONE" or a URL.
   actionAfterSolve: "SHOW_MESSAGE", //actionAfterSolve can be "NONE" or "SHOW_MESSAGE".
   //message: "Custom message",
   dbUrl: "https://cdn.jsdelivr.net/gh/lerocha/chinook-database/ChinookDatabase/DataSources/Chinook_Sqlite.sqlite",
@@ -14,23 +15,25 @@ export let ESCAPP_APP_SETTINGS = {
   ],
   tests: [
     {
-      "id": "hasName",
-      "description": "The output includes a 'Name' column.",
-      "kind": "result",
-      "fn": "({ columns }) => columns.includes('Name')"
+      id: "hasName",
+      description: "The output includes a 'Name' column.",
+      kind: "result",
+      fn: "return columns.includes('Name');"
     },
     {
-      "id": "hasName",
-      "description": "The output includes all playlists.",
-      "kind": "result",
-      "fn": "({ columns, rows }) => { const idx = columns.indexOf('Name'); console.log(idx); if (idx === -1) return false; return rows.some(r => String(r[idx]).toLowerCase().includes('audiobooks')); }"
+      id: "hasAllPlaylists",
+      description: "The output includes all playlists.",
+      kind: "result",
+      fn: "const idx = columns.indexOf('Name'); if (idx === -1) return false; return rows.some(r => String(r[idx]).toLowerCase().includes('audiobooks'));"
     },
     {
-      "id": "query_contains_playlists",
-      "description": "The query contains the word 'playlists'",
-      "fn": "({ query }) => /\\bPlaylist\\b/i.test(query)"
+      id: "query_contains_playlists",
+      description: "The query contains the word 'Playlist'.",
+      fn: "return /\\bPlaylist\\b/i.test(query);"
     }
   ],
+
+  //Settings that will be automatically specified by the Escapp server
   locale:"es",
   escappClientSettings: {
     endpoint:"https://escapp.es/api/escapeRooms/id",
